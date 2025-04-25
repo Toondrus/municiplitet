@@ -4,218 +4,72 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>АСООМ — Обращения граждан</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f6f8;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background-color: #004080;
-      color: white;
-      padding: 1rem;
-      text-align: center;
-    }
-    nav {
-      text-align: center;
-      margin-top: 1rem;
-    }
-    nav button {
-      margin: 0.5rem;
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-    .container {
-      max-width: 800px;
-      margin: 2rem auto;
-      background: white;
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    label {
-      display: block;
-      margin-top: 1rem;
-    }
-    input, select, textarea {
-      width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.3rem;
-    }
-    .appeal-item {
-      border-bottom: 1px solid #ccc;
-      padding: 1rem 0;
-    }
-    #loginContainer, #registerContainer {
-      display: none;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header>
     <h1>АСООМ — Обращения граждан</h1>
   </header>
-  <nav>
-    <button onclick="showLogin()">Вход</button>
-    <button onclick="showRegister()">Регистрация</button>
-    <button onclick="showForm()">Подать обращение</button>
-    <button onclick="showCabinet()">Личный кабинет</button>
-    <button onclick="logout()">Выход</button>
-  </nav>
 
-  <div class="container" id="loginContainer">
-    <h2>Вход</h2>
-    <form id="loginForm">
-      <label>Email <input type="email" name="email" required /></label>
-      <label>Пароль <input type="password" name="password" required /></label>
-      <button type="submit">Войти</button>
-    </form>
+  <!-- Страница авторизации/регистрации -->
+  <div class="container" id="authContainer">
+    <div id="loginForm">
+      <h2>Вход в систему</h2>
+      <form id="loginFormElement">
+        <label>Email <input type="email" id="loginEmail" required /></label>
+        <label>Пароль <input type="password" id="loginPassword" required /></label>
+        <div id="loginError" class="error"></div>
+        <button type="submit">Войти</button>
+      </form>
+      <p>Нет аккаунта? <a href="#" id="showRegister">Зарегистрироваться</a></p>
+    </div>
+
+    <div id="registerForm" style="display: none;">
+      <h2>Регистрация</h2>
+      <form id="registerFormElement">
+        <label>Email <input type="email" id="registerEmail" required /></label>
+        <label>Пароль <input type="password" id="registerPassword" required /></label>
+        <div id="registerError" class="error"></div>
+        <button type="submit">Зарегистрироваться</button>
+      </form>
+      <p>Уже есть аккаунт? <a href="#" id="showLogin">Войти</a></p>
+    </div>
   </div>
 
-  <div class="container" id="registerContainer">
-    <h2>Регистрация</h2>
-    <form id="registerForm">
-      <label>Email <input type="email" name="email" required /></label>
-      <label>Пароль <input type="password" name="password" required /></label>
-      <button type="submit">Зарегистрироваться</button>
-    </form>
+  <!-- Основная страница с обращениями -->
+  <div class="container" id="mainContainer" style="display: none;">
+    <div class="nav-buttons">
+      <button onclick="showForm()">Подать обращение</button>
+      <button onclick="showCabinet()">Личный кабинет</button>
+      <button onclick="logout()">Выход</button>
+    </div>
+
+    <div id="formContainer" style="display: none;">
+      <h2>Подать обращение</h2>
+      <form id="appealForm">
+        <label>ФИО <input type="text" name="name" required /></label>
+        <label>Email <input type="email" name="email" required /></label>
+        <label>Телефон <input type="tel" name="phone" id="phoneInput" placeholder="+7 (___) ___-__-__" required /></label>
+        <label>Категория
+          <select name="category" required>
+            <option value="ЖКХ">ЖКХ</option>
+            <option value="Дороги">Дороги</option>
+            <option value="Благоустройство">Благоустройство</option>
+            <option value="Другое">Другое</option>
+          </select>
+        </label>
+        <label>Описание <textarea name="description" rows="4" required></textarea></label>
+        <button type="submit">Отправить</button>
+      </form>
+    </div>
+
+    <div id="cabinetContainer">
+      <h2>Личный кабинет</h2>
+      <div id="appealsList"></div>
+    </div>
   </div>
 
-  <div class="container" id="formContainer" style="display: none;">
-    <h2>Подать обращение</h2>
-    <form id="appealForm">
-      <label>ФИО <input type="text" name="name" required /></label>
-      <label>Email <input type="email" name="email" required /></label>
-      <label>Телефон <input type="tel" name="phone" required /></label>
-      <label>Категория
-        <select name="category" required>
-          <option value="ЖКХ">ЖКХ</option>
-          <option value="Дороги">Дороги</option>
-          <option value="Благоустройство">Благоустройство</option>
-          <option value="Другое">Другое</option>
-        </select>
-      </label>
-      <label>Описание <textarea name="description" rows="4" required></textarea></label>
-      <button type="submit">Отправить</button>
-    </form>
-  </div>
-
-  <div class="container" id="cabinetContainer" style="display: none;">
-    <h2>Личный кабинет</h2>
-    <div id="appealsList"></div>
-  </div>
-
-  <script>
-    const loginContainer = document.getElementById("loginContainer");
-    const registerContainer = document.getElementById("registerContainer");
-    const formContainer = document.getElementById("formContainer");
-    const cabinetContainer = document.getElementById("cabinetContainer");
-    const appealsList = document.getElementById("appealsList");
-
-    function showLogin() {
-      hideAll();
-      loginContainer.style.display = "block";
-    }
-
-    function showRegister() {
-      hideAll();
-      registerContainer.style.display = "block";
-    }
-
-    function showForm() {
-      if (!isLoggedIn()) return alert("Пожалуйста, войдите в систему.");
-      hideAll();
-      formContainer.style.display = "block";
-    }
-
-    function showCabinet() {
-      if (!isLoggedIn()) return alert("Пожалуйста, войдите в систему.");
-      hideAll();
-      cabinetContainer.style.display = "block";
-      loadAppeals();
-    }
-
-    function hideAll() {
-      loginContainer.style.display = "none";
-      registerContainer.style.display = "none";
-      formContainer.style.display = "none";
-      cabinetContainer.style.display = "none";
-    }
-
-    function isLoggedIn() {
-      return !!localStorage.getItem("currentUser");
-    }
-
-    function logout() {
-      localStorage.removeItem("currentUser");
-      alert("Вы вышли из системы.");
-      hideAll();
-    }
-
-    document.getElementById("registerForm").addEventListener("submit", function (e) {
-      e.preventDefault();
-      const data = new FormData(e.target);
-      const email = data.get("email");
-      const password = data.get("password");
-      const users = JSON.parse(localStorage.getItem("users") || "{}");
-      if (users[email]) return alert("Пользователь уже зарегистрирован.");
-      users[email] = password;
-      localStorage.setItem("users", JSON.stringify(users));
-      alert("Регистрация успешна! Теперь вы можете войти.");
-      showLogin();
-    });
-
-    document.getElementById("loginForm").addEventListener("submit", function (e) {
-      e.preventDefault();
-      const data = new FormData(e.target);
-      const email = data.get("email");
-      const password = data.get("password");
-      const users = JSON.parse(localStorage.getItem("users") || "{}");
-      if (users[email] !== password) return alert("Неверные данные входа.");
-      localStorage.setItem("currentUser", email);
-      alert("Вы вошли в систему.");
-      showCabinet();
-    });
-
-    document.getElementById("appealForm").addEventListener("submit", function (e) {
-      e.preventDefault();
-      const data = new FormData(e.target);
-      const appeal = {
-        name: data.get("name"),
-        email: data.get("email"),
-        phone: data.get("phone"),
-        category: data.get("category"),
-        description: data.get("description"),
-        status: "Принято в работу",
-        user: localStorage.getItem("currentUser")
-      };
-      const appeals = JSON.parse(localStorage.getItem("appeals") || "[]");
-      appeals.push(appeal);
-      localStorage.setItem("appeals", JSON.stringify(appeals));
-      alert("Обращение отправлено!");
-      e.target.reset();
-    });
-
-    function loadAppeals() {
-      appealsList.innerHTML = "";
-      const currentUser = localStorage.getItem("currentUser");
-      const appeals = JSON.parse(localStorage.getItem("appeals") || "[]");
-      const userAppeals = appeals.filter(a => a.user === currentUser);
-      if (userAppeals.length === 0) {
-        appealsList.innerHTML = "<p>У вас нет обращений.</p>";
-        return;
-      }
-      userAppeals.forEach((item, index) => {
-        const div = document.createElement("div");
-        div.className = "appeal-item";
-        div.innerHTML = `<strong>${item.category}</strong><br />
-          <em>${item.description}</em><br />
-          Статус: ${item.status}`;
-        appealsList.appendChild(div);
-      });
-    }
-  </script>
+  <script src="auth.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
