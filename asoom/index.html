@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>АСООМ — Обращения граждан</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header>
+    <h1>АСООМ — Обращения граждан</h1>
+  </header>
+
+  <!-- Страница авторизации/регистрации -->
+  <div class="container" id="authContainer">
+    <div id="loginForm">
+      <h2>Вход в систему</h2>
+      <form id="loginFormElement">
+        <label>Email <input type="email" id="loginEmail" required /></label>
+        <label>Пароль <input type="password" id="loginPassword" required /></label>
+        <div id="loginError" class="error"></div>
+        <button type="submit">Войти</button>
+      </form>
+      <p>Нет аккаунта? <a href="#" id="showRegister">Зарегистрироваться</a></p>
+    </div>
+
+    <div id="registerForm" style="display: none;">
+  <h2>Регистрация</h2>
+  <form id="registerFormElement">
+    <label>Email <input type="email" id="registerEmail" required /></label>
+    <label>Пароль <input type="password" id="registerPassword" required /></label>
+    <label>Код работника (если есть) <input type="text" id="workerCode" /></label>
+    <div id="registerError" class="error"></div>
+    <button type="submit">Зарегистрироваться</button>
+  </form>
+  <p>Уже есть аккаунт? <a href="#" id="showLogin">Войти</a></p>
+</div>
+  </div>
+
+  <!-- Основная страница с обращениями -->
+  <div class="container" id="mainContainer" style="display: none;">
+    <div class="nav-buttons">
+      <button id="submitAppealBtn" onclick="showForm()">Подать обращение</button>
+      <button onclick="showCabinet()">Личный кабинет</button>
+      <button onclick="logout()">Выход</button>
+    </div>
+
+    <div id="formContainer" style="display: none;">
+      <h2>Подать обращение</h2>
+      <form id="appealForm">
+        <label>ФИО <input type="text" name="name" required /></label>
+        <label>Email <input type="email" name="email" required /></label>
+        <label>Телефон <input type="tel" name="phone" id="phoneInput" placeholder="+7 (___) ___-__-__" required /></label>
+        <label>Категория
+          <select name="category" required>
+            <option value="ЖКХ">ЖКХ</option>
+            <option value="Дороги">Дороги</option>
+            <option value="Благоустройство">Благоустройство</option>
+            <option value="Другое">Другое</option>
+          </select>
+        </label>
+        <label>Описание <textarea name="description" rows="4" required></textarea></label>
+        <button type="submit">Отправить</button>
+      </form>
+    </div>
+
+    <div id="cabinetContainer">
+      <h2>Личный кабинет</h2>
+      <div id="appealsList"></div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
